@@ -147,27 +147,10 @@ export default function CaseStudies() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              onClick={() => toggleCard(study.id)}
-              className={`relative bg-white/80 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 transition-all duration-300 cursor-pointer ${
+              className={`bg-white/80 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 transition-all duration-300 ${
                 expandedCard === study.id ? 'border-blue-500 shadow-xl' : 'border-gray-200 dark:border-gray-600/80'
               }`}
             >
-              {/* Click Me Indicator */}
-              <AnimatePresence>
-                {expandedCard !== study.id && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute -top-3 left-0 z-10 transform -rotate-12"
-                  >
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 rounded-md shadow-lg animate-pulse">
-                      <span className="text-xs font-bold whitespace-nowrap">Click Me</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
               {/* Card Header */}
               <div className="p-8">
                 <div className="flex items-start justify-between mb-6">
@@ -195,10 +178,7 @@ export default function CaseStudies() {
                     </div>
                   </div>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleCard(study.id)
-                    }}
+                    onClick={() => toggleCard(study.id)}
                     aria-label={expandedCard === study.id ? `Collapse ${study.title} details` : `Expand ${study.title} details`}
                     aria-expanded={expandedCard === study.id}
                     className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 focus:outline-none"

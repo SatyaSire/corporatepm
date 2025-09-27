@@ -303,27 +303,11 @@ export default function PersonasJourney() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className={`relative bg-white/70 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl p-6 border border-white/20 dark:border-slate-600/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:scale-105 ${
+                    className={`bg-white/70 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl p-6 border border-white/20 dark:border-slate-600/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:scale-105 ${
                       selectedPersona === persona.id ? 'ring-2 ring-blue-500 shadow-xl' : ''
                     }`}
                     onClick={() => setSelectedPersona(selectedPersona === persona.id ? null : persona.id)}
                   >
-                    {/* Click Me Indicator */}
-                    <AnimatePresence>
-                      {selectedPersona !== persona.id && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.8 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute -top-3 -left-2 z-10 transform -rotate-12"
-                        >
-                          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 rounded-md shadow-lg animate-pulse">
-                            <span className="text-xs font-bold whitespace-nowrap">Click Me</span>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                     <div className="text-center mb-4">
                       <div className="section-title mb-2">{persona.avatar}</div>
                       <h3 className="card-title text-gray-900 dark:text-white">{persona.name}</h3>
@@ -454,22 +438,6 @@ export default function PersonasJourney() {
                       } ${getEmotionBg(stage.emotions)}`}
                       onClick={() => setSelectedStage(selectedStage === stage.id ? null : stage.id)}
                     >
-                      {/* Click Me Indicator */}
-                      <AnimatePresence>
-                        {selectedStage !== stage.id && (
-                          <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute -top-3 -left-2 z-10 transform -rotate-12"
-                          >
-                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 rounded-md shadow-lg animate-pulse">
-                              <span className="text-xs font-bold whitespace-nowrap">Click Me</span>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
                       {/* Arrow connector */}
                       {index < journeyStages.length - 1 && (
                         <div className="hidden xl:block absolute -right-2 top-1/2 transform -translate-y-1/2 z-10">

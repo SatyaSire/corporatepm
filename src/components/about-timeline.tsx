@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { Calendar, MapPin, Award, Code, Users, Lightbulb, Target, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react'
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts'
 
@@ -224,7 +224,7 @@ export default function AboutTimeline() {
                         tabIndex={0}
                         aria-expanded={selectedEvent === event.id}
                         aria-label={`View details for ${event.title} at ${event.company}`}
-                        className={`relative flex-1 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                        className={`flex-1 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                           selectedEvent === event.id ? 'ring-2 ring-blue-500 shadow-xl' : 'hover:shadow-xl'
                         }`}
                         onClick={() => setSelectedEvent(selectedEvent === event.id ? null : event.id)}
@@ -235,22 +235,6 @@ export default function AboutTimeline() {
                           }
                         }}
                       >
-                        {/* Click Me Indicator */}
-                        <AnimatePresence>
-                          {selectedEvent !== event.id && (
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.8 }}
-                              transition={{ duration: 0.2 }}
-                              className="absolute -top-3 -left-2 z-10 transform -rotate-12"
-                            >
-                              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 rounded-md shadow-lg animate-pulse">
-                                <span className="text-xs font-bold whitespace-nowrap">Click Me</span>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
                         <div className="flex items-start justify-between mb-4">
                           <div>
                             <div className="flex items-center gap-2 mb-2">

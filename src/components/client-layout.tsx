@@ -5,6 +5,7 @@ import { Navigation } from './navigation'
 import WelcomePopup from './welcome-popup'
 import AIExploration from './ai-exploration'
 import ScrollToTop from './scroll-to-top'
+import FloatingThemeToggle from './floating-theme-toggle'
 
 interface ClientLayoutProps {
   children: React.ReactNode
@@ -32,6 +33,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         {children}
       </main>
       <WelcomePopup onAIExplore={handleAIExplore} />
+      <FloatingThemeToggle />
       <ScrollToTop />
     </>
   )

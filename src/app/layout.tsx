@@ -83,7 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${poppins.variable} ${playfair.variable} ${jetbrains.variable} ${manrope.variable} font-sans antialiased`}>
-        <ThemeProvider defaultTheme="light" storageKey="pm-portfolio-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="pm-portfolio-theme">
           <ClientLayout>
             {children}
           </ClientLayout>

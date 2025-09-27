@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Home, User, Briefcase, Target, Users, MessageCircle, Download, Zap, TrendingUp, Award, Brain } from "lucide-react"
-import { ThemeToggle } from "./theme-toggle"
 
 const navItems = [
   { name: "Home", href: "#hero", icon: Home, color: "from-blue-500 to-cyan-500" },
@@ -182,96 +181,67 @@ export function Navigation() {
             {/* Spacer for centering */}
             <div className="flex-1"></div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-3">
-              <ThemeToggle />
-              
-              {/* Premium Resume Button */}
-              <motion.button
-                aria-label="Download resume PDF"
-                className="hidden md:flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Download className="w-4 h-4" />
-                <span className="nav-link caption-text font-medium">Resume</span>
-                <motion.div
-                  className="w-2 h-2 bg-green-400 rounded-full"
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-              </motion.button>
-
-              {/* Mobile Menu Button */}
-              <div className="lg:hidden">
-                <motion.button
-                  onClick={() => setIsOpen(!isOpen)}
-                  aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                  aria-expanded={isOpen}
-                  aria-controls="mobile-navigation"
-                  className="p-2 rounded-full bg-white/10 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+            {/* Navigation Menu - Now on single line */}
+            <div className="hidden lg:flex items-center space-x-2">
+              {navItems.map((item, index) => {
+                const Icon = item.icon
+                const isActive = activeSection === item.href.substring(1)
+                return (
+                  <motion.button
+                    key={item.name}
+                    onClick={() => scrollToSection(item.href)}
+                    aria-label={`Navigate to ${item.name} section`}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`relative px-4 py-2 rounded-full transition-all duration-300 flex items-center space-x-2 group focus:outline-none focus:border focus:border-blue-500/60 ${
+                      isActive
+                        ? `bg-gradient-to-r ${item.color} text-white shadow-lg`
+                        : "text-gray-700 dark:text-gray-300 hover:bg-white/20 dark:hover:bg-slate-800/50"
+                    }`}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                  </motion.div>
-                </motion.button>
-              </div>
+                    <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${
+                      isActive ? "text-white" : "text-current"
+                    }`} />
+                    <span className="nav-link caption-text font-medium">{item.name}</span>
+                    {isActive && (
+                      <motion.div
+                        className="absolute -bottom-1 left-1/2 w-1 h-1 bg-white rounded-full"
+                        layoutId="activeIndicator"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        style={{ x: "-50%" }}
+                      />
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden">
+              <motion.button
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={isOpen}
+                aria-controls="mobile-navigation"
+                className="p-2 rounded-full bg-white/10 dark:bg-slate-800/50 backdrop-blur-sm border border-gray-400/60 dark:border-gray-500/60 hover:border-gray-500/80 dark:hover:border-gray-400/80 focus:outline-none focus:border-blue-500/60 transition-all duration-300"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <motion.div
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {isOpen ? <X className="w-5 h-5 text-gray-700 dark:text-gray-300" /> : <Menu className="w-5 h-5 text-gray-700 dark:text-gray-300" />}
+                </motion.div>
+              </motion.button>
             </div>
           </div>
-          
-          {/* Horizontal separator line */}
-          <div className="hidden lg:block">
-            <div className="mx-6 border-t border-gray-300/60 dark:border-gray-500/60"></div>
-          </div>
-          
-          {/* Second line with navigation pills */}
-          <div className="hidden lg:block">
-            <div className="flex items-center justify-center py-3">
-              <div className="flex items-center space-x-2">
-                {navItems.map((item, index) => {
-                  const Icon = item.icon
-                  const isActive = activeSection === item.href.substring(1)
-                  return (
-                    <motion.button
-                      key={item.name}
-                      onClick={() => scrollToSection(item.href)}
-                      aria-label={`Navigate to ${item.name} section`}
-                      aria-current={isActive ? 'page' : undefined}
-                      className={`relative px-4 py-2 rounded-full transition-all duration-300 flex items-center space-x-2 group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${
-                        isActive
-                          ? `bg-gradient-to-r ${item.color} text-white shadow-lg`
-                          : "text-gray-700 dark:text-gray-300 hover:bg-white/20 dark:hover:bg-slate-800/50"
-                      }`}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${
-                        isActive ? "text-white" : "text-current"
-                      }`} />
-                      <span className="nav-link caption-text font-medium">{item.name}</span>
-                      {isActive && (
-                        <motion.div
-                          className="absolute -bottom-1 left-1/2 w-1 h-1 bg-white rounded-full"
-                          layoutId="activeIndicator"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          style={{ x: "-50%" }}
-                        />
-                      )}
-                    </motion.button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
+
         </div>
 
         {/* Mobile Navigation Drawer */}
@@ -297,7 +267,7 @@ export function Navigation() {
                       onClick={() => scrollToSection(item.href)}
                       aria-label={`Navigate to ${item.name} section`}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`w-full text-left p-3 rounded-xl transition-all duration-300 flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent ${
+                      className={`w-full text-left p-3 rounded-xl transition-all duration-300 flex items-center space-x-3 group focus:outline-none focus:border focus:border-blue-500/60 ${
                         isActive
                           ? `bg-gradient-to-r ${item.color} text-white shadow-lg`
                           : "text-gray-700 dark:text-gray-300 hover:bg-white/20 dark:hover:bg-slate-800/50"
@@ -325,25 +295,7 @@ export function Navigation() {
                     </motion.button>
                   )
                 })}
-                
-                <motion.button
-                  aria-label="Download resume PDF"
-                  className="w-full p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white flex items-center space-x-3 mt-4 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navItems.length * 0.1 }}
-                  whileHover={{ x: 5, scale: 1.02 }}
-                >
-                  <div className="p-2 rounded-lg bg-white/20">
-                    <Download className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="font-heading font-medium">Download Resume</span>
-                  <motion.div
-                    className="ml-auto w-2 h-2 bg-green-400 rounded-full"
-                    animate={{ scale: [1, 1.3, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  />
-                </motion.button>
+
               </div>
             </motion.div>
           )}

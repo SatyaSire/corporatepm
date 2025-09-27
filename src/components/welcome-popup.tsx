@@ -14,7 +14,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
   const [hasBeenShown, setHasBeenShown] = useState(false)
 
   useEffect(() => {
-    // Show popup after a short delay on every page load
+    // Show popup on every page load/refresh after a short delay
     const timer = setTimeout(() => {
       setIsVisible(true)
     }, 1000)
@@ -42,6 +42,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
 
   const handleAIExplore = () => {
     setIsVisible(false)
+    localStorage.setItem('welcome-popup-last-shown', Date.now().toString())
     setHasBeenShown(true)
     onAIExplore?.()
   }
