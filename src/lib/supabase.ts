@@ -2,14 +2,20 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy-project.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bW15LXByb2plY3QiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0NjA1NjAwMCwiZXhwIjoxOTYxNjMyMDAwfQ.dummy-anon-key'
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
+// Client for public operations
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Admin client for server-side operations (bypasses RLS)
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
 
 // Database types
 export interface ContactSubmission {
   id?: string
   name: string
   email: string
+  mobile: string
   company?: string
   role?: string
   message: string
@@ -20,10 +26,10 @@ export interface ContactSubmission {
   status?: 'new' | 'contacted' | 'closed'
 }
 
-// Submit contact form to Supabase
+// Submit contact form to Supabase (using admin client to bypass RLS)
 export async function submitContactForm(formData: Omit<ContactSubmission, 'id' | 'created_at' | 'status'>) {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('contact_submissions')
       .insert([
         {

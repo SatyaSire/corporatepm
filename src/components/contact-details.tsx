@@ -26,6 +26,7 @@ import {
 interface FormData {
   name: string
   email: string
+  mobile: string
   company: string
   role: string
   message: string
@@ -116,6 +117,7 @@ export default function ContactDetails() {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
+    mobile: '',
     company: '',
     role: '',
     message: '',
@@ -125,6 +127,7 @@ export default function ContactDetails() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false)
   const [errors, setErrors] = useState<Partial<FormData>>({})
   const [submitError, setSubmitError] = useState<string>('')
 
@@ -145,6 +148,8 @@ export default function ContactDetails() {
     if (!formData.name.trim()) newErrors.name = 'Name is required'
     if (!formData.email.trim()) newErrors.email = 'Email is required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format'
+    if (!formData.mobile.trim()) newErrors.mobile = 'Mobile number is required'
+    else if (!/^[\+]?[1-9][\d]{0,15}$/.test(formData.mobile.replace(/[\s\-\(\)]/g, ''))) newErrors.mobile = 'Invalid mobile number format'
     if (!formData.message.trim()) newErrors.message = 'Message is required'
     
     setErrors(newErrors)
@@ -174,23 +179,23 @@ export default function ContactDetails() {
       }
 
       setIsSubmitting(false)
-      setIsSubmitted(true)
+      setShowSuccessPopup(true)
       setSubmitError('')
       
-      // Reset form after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setFormData({
-          name: '',
-          email: '',
-          company: '',
-          role: '',
-          message: '',
-          projectType: '',
-          timeline: '',
-          budget: ''
-        })
-      }, 5000)
+      // Reset form after showing success popup
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        company: '',
+        role: '',
+        message: '',
+        projectType: '',
+        timeline: '',
+        budget: ''
+      })
+      
+      // Popup will stay visible until user clicks "Awesome!" button
       
     } catch (error) {
       console.error('Form submission error:', error)
@@ -229,22 +234,7 @@ export default function ContactDetails() {
               Start a Conversation
             </h3>
             
-            {isSubmitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-12"
-              >
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h4 className="card-title text-gray-900 dark:text-white mb-2">
-                  Message Sent Successfully!
-                </h4>
-                <p className="body-text text-gray-600 dark:text-gray-300">
-                  Thank you for reaching out. I'll get back to you within 24 hours.
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block caption-text text-gray-700 dark:text-gray-300 mb-2">
@@ -289,6 +279,28 @@ export default function ContactDetails() {
                     />
                     {errors.email && <p id="email-error" className="text-red-500 caption-text mt-1" role="alert">{errors.email}</p>}
                   </div>
+                </div>
+
+                <div>
+                  <label htmlFor="mobile" className="block caption-text text-gray-700 dark:text-gray-300 mb-2">
+                    <Phone className="w-4 h-4 inline-block mr-2" />
+                    Mobile Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    id="mobile"
+                    value={formData.mobile}
+                    onChange={handleInputChange}
+                    required
+                    aria-invalid={errors.mobile ? 'true' : 'false'}
+                    aria-describedby={errors.mobile ? 'mobile-error' : undefined}
+                    className={`w-full px-4 py-3 rounded-lg border bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.mobile ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                    }`}
+                    placeholder="+1 (555) 123-4567"
+                  />
+                  {errors.mobile && <p id="mobile-error" className="text-red-500 caption-text mt-1" role="alert">{errors.mobile}</p>}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -437,8 +449,51 @@ export default function ContactDetails() {
                   )}
                 </motion.button>
               </form>
-            )}
           </motion.div>
+          
+          {/* Success Popup Modal */}
+          {showSuccessPopup && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+              onClick={() => setShowSuccessPopup(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                className="bg-white dark:bg-slate-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl border border-white/20 dark:border-slate-600/60"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                  >
+                    <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                    🎉 Message Sent Successfully!
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    Thank you for reaching out! Your message has been received and I'll get back to you within 24 hours. 
+                    Looking forward to discussing your project!
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowSuccessPopup(false)}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  >
+                    Awesome! 👍
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
 
           {/* Contact Info & Social */}
           <motion.div

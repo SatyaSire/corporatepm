@@ -8,6 +8,7 @@ async function sendEmailNotification(formData: Omit<ContactSubmission, 'id' | 'c
   console.log('📧 New Contact Form Submission:')
   console.log('Name:', formData.name)
   console.log('Email:', formData.email)
+  console.log('Mobile:', formData.mobile)
   console.log('Company:', formData.company)
   console.log('Role:', formData.role)
   console.log('Project Type:', formData.project_type)
@@ -56,9 +57,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     
     // Validate required fields
-    if (!body.name || !body.email || !body.message) {
+    if (!body.name || !body.email || !body.mobile || !body.message) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, email, and message are required' },
+        { error: 'Missing required fields: name, email, mobile, and message are required' },
         { status: 400 }
       )
     }
@@ -76,6 +77,7 @@ export async function POST(request: NextRequest) {
     const formData: Omit<ContactSubmission, 'id' | 'created_at' | 'status'> = {
       name: body.name.trim(),
       email: body.email.trim().toLowerCase(),
+      mobile: body.mobile.trim(),
       company: body.company?.trim() || null,
       role: body.role?.trim() || null,
       message: body.message.trim(),
