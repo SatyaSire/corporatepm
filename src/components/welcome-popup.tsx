@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Sparkles, MousePointer, FileText } from 'lucide-react'
+import { X, Sparkles, MousePointer2 } from 'lucide-react';
 
 interface WelcomePopupProps {
   onClose?: () => void
@@ -11,7 +11,6 @@ interface WelcomePopupProps {
 
 export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [hasBeenShown, setHasBeenShown] = useState(false)
 
   useEffect(() => {
     // Show popup on every page load/refresh after a short delay
@@ -24,13 +23,11 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
 
   const handleClose = () => {
     setIsVisible(false)
-    setHasBeenShown(true)
     onClose?.()
   }
 
   const handleExplore = () => {
     setIsVisible(false)
-    setHasBeenShown(true)
     onClose?.()
     
     // Smooth scroll to the about section
@@ -43,7 +40,6 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
   const handleAIExplore = () => {
     setIsVisible(false)
     localStorage.setItem('welcome-popup-last-shown', Date.now().toString())
-    setHasBeenShown(true)
     onAIExplore?.()
   }
 
@@ -125,7 +121,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
                   transition={{ delay: 0.8 }}
                   className="text-base font-semibold text-gray-800 dark:text-gray-200"
                 >
-                  Let's End the Era of Traditional Resumes
+                  Let&apos;s End the Era of Traditional Resumes
                 </motion.p>
                 
                 <motion.p 
@@ -134,7 +130,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
                   transition={{ delay: 1.0 }}
                   className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"
                 >
-                  This isn't just another resume - it's an interactive experience that tells my story as a Product Manager. 
+                  This isn&apos;t just another resume - it&apos;s an interactive experience that tells my story as a Product Manager. 
                   Every element is clickable, every section reveals insights, and every interaction showcases my approach to product thinking.
                 </motion.p>
               </div>
@@ -147,7 +143,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
                 className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-3 mb-4 border border-blue-200/50 dark:border-blue-700/50"
               >
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <MousePointer className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <MousePointer2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <span className="font-medium text-blue-800 dark:text-blue-300">Everything is Interactive!</span>
                 </div>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
@@ -169,7 +165,7 @@ export default function WelcomePopup({ onClose, onAIExplore }: WelcomePopupProps
                 whileTap={{ scale: 0.98 }}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-teal-600 text-white py-3 px-6 rounded-xl font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2"
               >
-                <MousePointer className="w-5 h-5" />
+                <MousePointer2 className="w-5 h-5" />
                 Start Exploring Manually
               </motion.button>
               
