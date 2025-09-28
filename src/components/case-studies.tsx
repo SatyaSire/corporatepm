@@ -160,7 +160,7 @@ export default function CaseStudies() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute -top-3 -left-2 z-20 transform -rotate-12 pointer-events-auto cursor-pointer"
+                    className="absolute -top-3 left-2 z-20 transform -rotate-12 pointer-events-auto cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation()
                       toggleCard(study.id)
@@ -198,7 +198,7 @@ export default function CaseStudies() {
                       <span>{study.role}</span>
                     </div>
                   </div>
-                  <div className="relative">
+                  <div className="relative mr-2">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
